@@ -36,7 +36,12 @@ class InvalidCodepointContext(IDNAError):
 def _combining_class(cp):
     v = unicodedata.combining(unichr(cp))
     if v == 0:
-        if not unicodedata.name(unichr(cp)):
+        try:
+            unicodedata_name = unicodedata.name(unichr(cp))
+        except ValueError:
+            unicodedata_name = None
+
+        if not unicodedata_name:
             raise ValueError("Unknown character in unicodedata")
     return v
 
